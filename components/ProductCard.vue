@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps } from 'vue';
+import { defineProps, defineEmits } from 'vue';
 import type { Product, ProductsList } from "../types/product"
 const props = defineProps<{
   product: Product;
@@ -17,9 +17,14 @@ function truncateTitle(description: string): string {
   }
   return description;
 }
+
+const emits = defineEmits(['openModal']);
+function openProductModal() {
+  emits('openModal', props.product.id);
+}
 </script>
 <template>
-    <NuxtLink v-if="props.product" :to="`/product/${props.product.id}`">
+    <div v-if="props.product" @click="openProductModal">
         <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
         <img :src="props.product.image" :alt="props.product.title" class="h-full w-full object-cover object-center lg:h-full lg:w-full">
         </div>
@@ -35,5 +40,5 @@ function truncateTitle(description: string): string {
         </div>
         <p class="text-sm font-medium text-gray-900">€{{ props.product.price }}</p>
         </div>
-    </NuxtLink>
+    </div>
 </template>
